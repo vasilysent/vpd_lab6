@@ -1,13 +1,25 @@
 import matplotlib.pyplot as plt
 
 files = [
-  ['data/m1.txt', 'Траектория (модель)']
+  #['data/linear_exp.txt', 'Траектория (эксп.), линейное управление'],
+  #['data/hyperbolic_dich.txt', 'Траектория (эксп.), нелинейное управление'],
+  #['data/nonlinear_exp.txt', 'Траектория (эксп.), нелинейное управление'],
+  
+  ['data/linear_exp_0_0.5.txt', 'Движение в (0, 0.5), лин.'],
+  ['data/linear_exp_0.5_0.txt', 'Движение в (0.5, 0), лин.'],
+  ['data/linear_exp_0_-0.5.txt', 'Движение в (0, -0.5), лин.'],
+  ['data/linear_exp_-0.5_0.txt', 'Движение в (-0.5, 0), лин.'],
+  ['data/nonlinear_exp_0_0.5.txt', 'Движение в (0, 0.5), нелин.'],
+  ['data/nonlinear_exp_0.5_0.txt', 'Движение в (0.5, 0), нелин.'],
+  ['data/nonlinear_exp_0_-0.5.txt', 'Движение в (0, -0.5), нелин.'],
+  ['data/nonlinear_exp_-0.5_0.txt', 'Движение в (-0.5, 0), нелин.'],
   #['data/data10.txt', 'Движение в (1, 0)'],
   #['data/data-10.txt', 'Движение в (-1, 0)'],
   #['data/data0-1.txt', 'Движение в (0, -1)'],
 ]
 
 data = []
+square_length = 0.5 # m
 
 for file in files:
   time = []
@@ -26,11 +38,11 @@ for file in files:
 for graph in data:
   plt.plot(graph[1], graph[2], label=graph[4])
 
-for dot in [[0.35, 0], [0.35, 0.35], [0, 0.35], [0, 0]]:
+for dot in [[square_length, 0], [square_length, square_length], [0, square_length], [0, 0]]:
   plt.scatter(dot[0], dot[1], marker='.', s=250, color="orange")
 
 plt.title(r'Движения робота')
-plt.axis([-0.25, 0.75, -0.25, 0.75])
+#plt.axis([-1, 1, -1, 1])
 plt.xlabel(r'x, м')
 plt.ylabel(r'y, м')
 
