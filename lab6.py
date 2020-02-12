@@ -4,22 +4,23 @@ import time
 import math
 
 #----------------------------------------- robot's parameters
-R = 41 # radius of the wheels [mm]
-L = 162 # distance between wheels [mm]
+R = 28 # radius of the wheels [mm]
+L = 168 # distance between wheels [mm]
 v_min = 20 * 2 * R
 v_max = 90 * 2 * R
 #-----------------------------------------
 
 #----------------------------------------- aim position
-x_des = 35
-y_des = 5
-eps = 55
+# x_des = 35
+# y_des = 5
+eps = 10
 # trajectory = [[300, -200]]
-trajectory = [[300, 0], [300, 300], [0, 300], [0, 0]]
+a = 500
+trajectory = [[a, 0], [a, a], [0, a], [0, 0]]
 #-----------------------------------------
 
 #----------------------------------------- 
-kp_ang = 35             # proportional gain for angular speed
+kp_ang = 45             # proportional gain for angular speed
 kp_v = 4                # proportional gain for linear speed
 #-----------------------------------------
 
@@ -42,10 +43,9 @@ data.write ('0 0' + '\n')
 
 for i in range(len(trajectory)):
     way = eps + 1
-    phi_des = math.atan2( (trajectory[i][1] - y_cur) , (trajectory[i][0] - x_cur) )
-
+    
     while way >= eps:
-
+        phi_des = math.atan2( (trajectory[i][1] - y_cur) , (trajectory[i][0] - x_cur) )
         way = math.sqrt( (trajectory[i][0] - x_cur)**2 + (trajectory[i][1] - y_cur)**2 ) # distance error
 
         r_enc = mC.position - prev_r_pos             # new delta encs right
@@ -71,6 +71,7 @@ for i in range(len(trajectory)):
         w = kp_ang * angle_error 
       
         u_v = kp_v * way
+
         if (kp_v * way < v_min):
             u_v = v_min
         if (kp_v * way > v_max):
@@ -98,7 +99,7 @@ for i in range(len(trajectory)):
         mC.run_direct(duty_cycle_sp = v_r)
 
         current_time = time.time() - start_time
-        data.write(str(x_cur) + ' ' + str(y_cur) + ' ' + ' ' + str(phi_cur) + str(current_time) + '\n')
+        data.write(str(x_cur) + ' ' + str(y_cur) + ' ' + str(phi_cur) + ' ' + str(current_time) + '\n')
 
 
 mB.stop(stop_action = 'brake')
