@@ -2,7 +2,7 @@
 from ev3dev.ev3 import *
 import time
 import math
-
+from math import copysign
 #----------------------------------------- robot's parameters
 R = 41 # radius of the wheels [mm]
 L = 162 # distance between wheels [mm]
@@ -38,6 +38,11 @@ prev_l_pos = prev_r_pos = 0
 start_time = time.time()
 data = open ('lab5_kp_ang' + str(kp_ang) + '_kp_v_' + str(kp_v) + '_x_' + str(trajectory[0][0]) + '_y_' + str(trajectory[0][1])  + '.txt', 'w')
 data.write ('0 0' + '\n')
+
+def limiting(v):
+    if abs(v)>100:
+        v = copysign(100,v)
+    return v
 
 
 for i in range(len(trajectory)):
@@ -85,14 +90,8 @@ for i in range(len(trajectory)):
 
         print ('v left = ' + str(v_l) + ' v right = ' +  str(v_r) + ' angle error =  ' + str(angle_error) + ' r_dist = ' +  str(r_dist) + ' l_dist = ' +  str(l_dist) + ' way = ' +  str(way) )
 
-        if v_r > 100:
-            v_r = 100
-        if v_r < -100:
-            v_r = -100
-        if v_l > 100:
-            v_l = 100
-        if v_l < -100:
-            v_l = -100
+        v_r = limiting(v_r)
+        v_l = limiting(v_l)
 
         mB.run_direct(duty_cycle_sp = v_l)
         mC.run_direct(duty_cycle_sp = v_r)
